@@ -27,6 +27,7 @@ import { assetHubNextWestendControllers } from './assetHubNextWestendControllers
 import { assetHubPolkadotControllers } from './assetHubPolkadotControllers';
 import { assetHubWestendControllers } from './assetHubWestendControllers';
 import { astarControllers } from './astarControllers';
+import { autonomysControllers } from './autonomysControllers';
 import { bifrostControllers } from './bifrostControllers';
 import { bifrostPolkadotControllers } from './bifrostPolkadotControllers';
 import { calamariControllers } from './calamariControllers';
@@ -73,6 +74,7 @@ export const specToControllerMap: { [x: string]: ControllerConfig } = {
 	shiden: shidenControllers,
 	astar: astarControllers,
 	sora: soraControllers,
+	subspace: autonomysControllers,
 	calamari: calamariControllers,
 	karura: karuraControllers,
 	acala: acalaControllers,
