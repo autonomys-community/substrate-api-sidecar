@@ -288,7 +288,15 @@ function sanitizeMetadataExceptionsV14(
 		if (isHex(struct[key]) && (typeDef.lookupName || typeDef.type)) {
 			const typeName = typeDef.lookupName || typeDef.type;
 
-			struct[key] = sanitizeNumbers(registry.createType(typeName, u8aValue).toJSON(), { metadataOpts });
+			try {
+				struct[key] = sanitizeNumbers(registry.createType(typeName, u8aValue).toJSON(), { metadataOpts });
+			} catch (error) {
+				// If type creation fails (e.g., for custom chain types not in polkadot-js registry),
+				// fallback to the original hex value rather than crashing
+				const errorMessage = error instanceof Error ? error.message : String(error);
+				console.warn(`Failed to create type '${typeName}' during metadata sanitization: ${errorMessage}`);
+				// Keep the original hex value
+			}
 		}
 	}
 }
