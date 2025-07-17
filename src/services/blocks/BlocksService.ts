@@ -530,7 +530,12 @@ export class BlocksService extends AbstractService {
 		const defaultSuccess = typeof events === 'string' ? events : false;
 
 		return block.extrinsics.map((extrinsic) => {
-			const { method, nonce, signature, signer, isSigned, tip, era } = extrinsic;
+			const { method, era, isSigned } = extrinsic;
+
+			const { nonce, signature, signer, tip } = isSigned
+				? extrinsic
+				: { nonce: null, signature: null, signer: null, tip: null };
+
 			const hash = u8aToHex(blake2AsU8a(extrinsic.toU8a(), 256));
 			const call = registry.createType('Call', method);
 
@@ -539,8 +544,8 @@ export class BlocksService extends AbstractService {
 					pallet: method.section,
 					method: method.method,
 				},
-				signature: isSigned ? { signature, signer } : null,
-				nonce: isSigned ? nonce : null,
+				signature: isSigned && signature && signer ? { signature, signer } : null,
+				nonce,
 				args: this.parseGenericCall(call, registry).args,
 				tip: isSigned ? tip : null,
 				hash,
